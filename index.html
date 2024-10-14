@@ -1,10 +1,173 @@
-<html>
-  <head>
-    <meta name="color-scheme" content="light dark">
-  </head>
-  <body>
-    <pre style="word-wrap: break-word; white-space: pre-wrap; margin: 0; padding: 0;">
-print("Hello")
-    </pre>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Page</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #020a17;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Notification box styling */
+    .notification {
+      display: none;
+      width: 320px;
+      height: 160px;
+      background-color: #011122;
+      border-radius: 20px;
+      border: 2px solid #0c1a2f;
+      padding: 20px;
+      box-sizing: border-box;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .notification-title {
+      font-family: 'Gotham', sans-serif;
+      font-size: 20px;
+      color: white;
+      margin: 0;
+      padding-bottom: 10px;
+    }
+
+    .notification-description {
+      font-family: 'Montserrat', sans-serif;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    /* Input form for editing event */
+    .event-form {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    input, textarea {
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: 1px solid #0c1a2f;
+      background-color: #011122;
+      color: white;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #0c1a2f;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b2c45;
+    }
+  </style>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+  <!-- Notification Box -->
+  <div id="notificationBox" class="notification">
+    <h2 id="notificationTitle" class="notification-title">Notification</h2>
+    <p id="notificationDescription" class="notification-description">There are no events yet.</p>
+  </div>
+
+  <!-- Event Form (edit title and description if event is true) -->
+  <div id="eventForm" class="event-form">
+    <input type="text" id="titleInput" placeholder="Edit title" />
+    <textarea id="descriptionInput" placeholder="Edit description"></textarea>
+    <button onclick="saveEventDetails()">Save</button>
+  </div>
+
+  <script>
+    // Simulated event state and backend access
+    var event = false;  // Initial state of the event
+    var authToken = 'F{+[P#Aev3^OXE4q-FC';  // Authorization token
+
+    // Function to verify token and allow access to backend settings
+    function authenticateUser() {
+      var userToken = prompt('Enter the access code to modify event settings:');
+      if (userToken === authToken) {
+        modifyEventState();
+      } else {
+        alert('Invalid access code!');
+      }
+    }
+
+    // Function to modify the event state (true or false)
+    function modifyEventState() {
+      var newEventState = confirm('Do you want to set the event to TRUE? Click OK for true, Cancel for false.');
+      event = newEventState;
+      
+      if (event) {
+        // Show the editing form if event is true
+        document.getElementById('eventForm').style.display = 'flex';
+        document.getElementById('notificationBox').style.display = 'none'; // Hide the notification while editing
+      } else {
+        // If event is false, show the default notification
+        document.getElementById('notificationBox').style.display = 'block';
+        document.getElementById('eventForm').style.display = 'none';
+        document.getElementById('notificationTitle').innerText = 'Notification';
+        document.getElementById('notificationDescription').innerText = 'There are no events yet.';
+      }
+    }
+
+    // Function to save the edited event details
+    function saveEventDetails() {
+      var newTitle = document.getElementById('titleInput').value;
+      var newDescription = document.getElementById('descriptionInput').value;
+
+      // Update the notification with new title and description
+      document.getElementById('notificationTitle').innerText = newTitle || 'Notification'; // Default title if empty
+      document.getElementById('notificationDescription').innerText = newDescription || 'No description provided.';
+      
+      // Show the notification with updated details
+      document.getElementById('notificationBox').style.display = 'block';
+      document.getElementById('eventForm').style.display = 'none';
+    }
+
+    // Parse URL parameters
+    function getURLParameter(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    // Main function to handle which page to show
+    function handlePageLoad() {
+      const pageType = getURLParameter('='); // Get the value of the query parameter
+
+      if (pageType === 'events') {
+        // Show the event notification page
+        document.getElementById('notificationBox').style.display = 'block';
+      } else if (pageType === 'event-setting') {
+        // Access backend for event settings
+        authenticateUser();
+      } else {
+        // Invalid URL parameter, show an error or default behavior
+        alert('Invalid URL parameter. Please visit /direct?=events or /direct?=event-setting.');
+      }
+    }
+
+    // Call the function on page load
+    handlePageLoad();
+
+  </script>
+
+</body>
 </html>
