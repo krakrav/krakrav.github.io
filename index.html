@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist</title>
+    <style>
+        body {
+            background-color: #ffccff; /* Light pink background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        iframe {
+            border-radius: 12px;
+            width: 90%; /* Responsive width */
+            max-width: 600px; /* Limit the iframe size */
+            height: 352px; /* Fixed height */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow for aesthetics */
+        }
+    </style>
+</head>
+<body>
+    <iframe 
+        src="https://open.spotify.com/embed/playlist/2DNsRo5bRlUdOqXOfEdOEh?utm_source=generator&theme=0" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+    </iframe>
+</body>
+</html>
