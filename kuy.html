@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ระบบขยะ + ผู้ใช้</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 { color: #333; }
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: teal;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #007b7b;
+    }
+    #main-section, #dashboard {
+      display: none;
+      margin-top: 20px;
+    }
+    .user-entry {
+      background: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<h1>ระบบติดตามการทิ้งขยะ</h1>
+
+<div id="auth-section">
+  <input type="text" id="username" placeholder="ชื่อผู้ใช้">
+  <input type="password" id="password" placeholder="รหัสผ่าน">
+  <button onclick="register()">สมัครสมาชิก</button>
+  <button onclick="login()">เข้าสู่ระบบ</button>
+</div>
+
+<div id="main-section">
+  <p>ยินดีต้อนรับ, <strong id="userDisplay"></strong>!</p>
+  <input type="number" id="trashCount" placeholder="วันนี้ทิ้งขยะไปกี่ชิ้น?">
+  <button onclick="submitTrash()">บันทึกขยะ</button>
+  <button onclick="showData()">ดูข้อมูลทั้งหมด</button>
+</div>
+
+<div id="dashboard">
+  <h3>ข้อมูลผู้ใช้ทั้งหมด:</h3>
+  <div id="userDataList"></div>
+</div>
+
+<script>
+  const USERS_KEY = "users_data";
+  let currentUser = null;
+
+  function getUsers() {
+    return JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
+  function register() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!username || !password) {
+      alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+      return;
+    }
+
+    let users = getUsers();
+    if (users[username]) {
+      alert("ชื่อผู้ใช้นี้ถูกใช้แล้ว! โปรดเข้าสู่ระบบ");
+      return;
+    }
+
+    users[username] = { password: password, trash: 0, score: 0 };
+    saveUsers(users);
+    alert("สมัครสมาชิกเรียบร้อย ✅ กรุณาล็อกอิน");
+  }
+
+  function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    let users = getUsers();
+    if (!users[username]) {
+      alert("ไม่พบผู้ใช้นี้! กรุณาสมัครก่อน");
+      return;
+    }
+
+    if (users[username].password !== password) {
+      alert("รหัสผ่านไม่ถูกต้อง");
+      return;
+    }
+
+    currentUser = username;
+    document.getElementById("auth-section").style.display = "none";
+    document.getElementById("main-section").style.display = "block";
+    document.getElementById("userDisplay").innerText = username;
+  }
+
+  function submitTrash() {
+    const count = parseInt(document.getElementById('trashCount').value);
+    if (isNaN(count) || count < 0) {
+      alert("กรุณากรอกจำนวนขยะที่ถูกต้อง");
+      return;
+    }
+
+    let users = getUsers();
+    users[currentUser].trash += count;
+    saveUsers(users);
+
+    alert("บันทึกข้อมูลเรียบร้อย ✅");
+    document.getElementById('trashCount').value = '';
+  }
+
+  function showData() {
+    const users = getUsers();
+    const container = document.getElementById('userDataList');
+    container.innerHTML = '';
+
+    Object.keys(users).forEach(user => {
+      const div = document.createElement('div');
+      div.className = 'user-entry';
+      div.innerHTML = `
+        <strong>${user}</strong><br>
+        ขยะสะสม: ${users[user].trash} ชิ้น<br>
+        คะแนน: ${users[user].score}<br>
+        <input type="number" placeholder="เพิ่มคะแนน" onchange="addScore('${user}', this.value)">
+      `;
+      container.appendChild(div);
+    });
+
+    document.getElementById('dashboard').style.display = 'block';
+  }
+
+  function addScore(user, value) {
+    const score = parseInt(value);
+    if (isNaN(score)) return;
+
+    let users = getUsers();
+    users[user].score += score;
+    saveUsers(users);
+    showData(); // refresh dashboard
+  }
+</script>
+
+</body>
+</html>
