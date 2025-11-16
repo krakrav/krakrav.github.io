@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,8 +19,6 @@
       --success:#16a34a; --danger:#ef4444;
       --card-shadow: 0 6px 18px rgba(16,24,40,0.04);
       --radius:12px; --ease:220ms cubic-bezier(.2,.9,.2,1);
-
-      /* sizing tokens */
       --btn-vertical-padding:8px; --btn-horizontal-padding:12px;
       --input-vertical-padding:10px; --input-horizontal-padding:12px;
       --thumb-size:56px;
@@ -40,11 +39,9 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--page-bg); color:var(--accent); transition:background var(--ease), color var(--ease); -webkit-font-smoothing:antialiased}
-
     body.compact .wrap{max-width:900px;padding:12px}
     body.compact .card{padding:10px;border-radius:10px}
     body.compact .goal{padding:8px}
-
     .wrap{max-width:980px; margin:24px auto; padding:16px}
     header{display:flex; align-items:center; justify-content:space-between; gap:12px}
     h1{font-size:19px; margin:0}
@@ -102,15 +99,11 @@
     .goal{ animation: fadeInUp .22s ease both }
     .pulse{ animation: pulse .7s ease }
     @keyframes pulse{ 0%{ transform:scale(1)} 50%{ transform:scale(1.02)} 100%{ transform:scale(1)} }
-
-    /* overlay modal for settings */
     .overlay{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.45); backdrop-filter: blur(6px); z-index:80; opacity:0; pointer-events:none; transition:opacity .18s ease}
     .overlay.open{opacity:1; pointer-events:auto}
     .modal{width:520px; max-width:94%; background:var(--card-bg); border-radius:12px; padding:16px; border:var(--input-border); box-shadow:0 20px 50px rgba(2,6,23,0.6); transform:translateY(10px); transition:transform .18s ease, opacity .18s ease}
     .overlay.open .modal{ transform:none }
     .modal h2{margin:0 0 6px}
-
-    /* fancy custom dropdown */
     .custom-dropdown{position:relative; user-select:none}
     .custom-dropdown .selected{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px; border-radius:8px; border:var(--input-border); cursor:pointer; background:transparent}
     .custom-dropdown .selected:after{content:''; width:14px; height:14px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%2364748b' d='M7 10l5 5 5-5z'/></svg>"); background-repeat:no-repeat; background-position:center; transform-origin:center; transition:transform .18s ease}
