@@ -1,0 +1,5 @@
+{
+  "name": "Fynal Sync",
+  "description": "A secure, real-time file sharing and chat session tool. Create ephemeral rooms, control access with 2FA, and share across devices.",
+  "requestFramePermissions": []
+}
